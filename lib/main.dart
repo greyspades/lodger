@@ -1,6 +1,26 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:lodger/appbar.dart';
-void main() {
+import 'package:lodger/usersRow.dart';
+import 'package:mongo_dart/mongo_dart.dart'  show Db, DbCollection;
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
+import 'dart:developer' as developer;
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:developer';
+import 'package:lodger/components/avatar.dart';
+
+
+void main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
@@ -17,6 +37,82 @@ class Top extends StatelessWidget {
   }
 }
 
+
+
+
+
+
+class AddUser extends StatelessWidget {
+  final String? name;
+  final String? room;
+  final int? rent;
+  final bool? paid;
+  final int? owing;
+  final String? password;
+
+  AddUser({this.name,this.rent,this.owing,this.paid,this.room,this.password});
+
+  CollectionReference users=FirebaseFirestore.instance.collection('users');
+
+  Future<void> addUser(){
+    return users
+        .add({
+          'name':name,
+          'room':room,
+          'rent':rent,
+          'paid':paid,
+          'owing':owing,
+          'password':password,
+        })
+        .then((value){
+          print(value);
+          print('added user');
+        })
+        .catchError((e){
+          print(e);
+          print('failed to save user');
+        });
+        
+  }
+
+  @override
+  Widget build(BuildContext context){
+    
+    return ElevatedButton(onPressed:addUser, child: Text('Add user'));
+  }
+}
+
+
+
+
+
+
+class User {
+  final String? name;
+  final String? room;
+  final String? rent;
+  final bool? paid;
+
+  User({this.name, this.room, this.rent, this.paid});
+
+  
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      name: json['name'],
+      room: json['room'],
+      rent: json['rent'],
+      paid: json['paid']
+    
+    );
+  }
+   Map<String, dynamic> toJson() => {
+    "name": name,
+    "room": room,
+  };
+
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -24,35 +120,29 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
+
         primarySwatch: Colors.blue,
       ),
       home: MyHomePage(),
+      
     );
   }
 }
 
-// class MyHomePage extends StatefulWidget {
+class MyHomePage extends StatefulWidget {
 
-//   @override 
+  @override 
   
-//   _HomePageState createState()=>_HomePageState();
-// }
+  _HomePageState createState()=>_HomePageState();
+}
 
 
 
 
-class MyHomePage extends StatelessWidget {
+class _HomePageState extends State<MyHomePage> {
   //_HomePageState({Key? key, required this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -65,62 +155,101 @@ class MyHomePage extends StatelessWidget {
   // always marked "final".
 
   String? title;
+  // _HomePageState(){
+  //   getData();
+  // }
 
   bool drawerOpen=false;
+  var name;
+
   
   void toggleDrawer(){
-    drawerOpen=!drawerOpen;
+    //drawerOpen=!drawerOpen;
+    //data.getUsers();
+    print('ludex gundyr');
   }
+  
+  AddUser addUser=AddUser(
+    name: 'judith',
+    room: 'c9',
+    rent: 137000,
+    owing: 14000,
+    paid: true,
+    
+  );
+  CollectionReference users=FirebaseFirestore.instance.collection('users');
+  
+  // getData() async{
+  //   return await users.doc('bmUlp2nAWAj9uJcV79sc').get()
+  //   .then((DocumentSnapshot snapshot){
+  //       //  setState(() {
+  //       //    name=snapshot.data();
+  //       //  });
+  //       //  //var name1=snapshot['name'].data();
+  //       //    print(name);
+  //          //print(name1);
+  //          print('gotten data');
+  //   })
+  //   .catchError((e){
+  //     print(e);
+  //     print('error');
+  //   });
+  // }
+
+  
+final Stream<QuerySnapshot> usersStream = FirebaseFirestore.instance.collection('users').snapshots();
 
   @override
   Widget build(BuildContext context){
     return Scaffold(
-        // appBar:AppBar(
-        //   elevation: 0,
-        //   toolbarHeight: 200,
-        //   leading: Align(alignment: Alignment.topLeft,
-          
-        //   child:IconButton(icon: Icon(Icons.menu,size: 30,
-          
-        //    color: const Color(0xffAD714C),),
-        //    onPressed: toggleDrawer,
-        //    )),
-        //   flexibleSpace: Image(
-        //     image:const AssetImage('images/background.jpg'), 
-        //     fit: BoxFit.cover,
-        //   ),
-        // ) ,
-        // appBar: PreferredSize(preferredSize: Size.fromHeight(200),
-        // child: MyAppbar(),
-        // ),
+
         body: Stack(children:<Widget> [
          Container(
-           child:  PreferredSize(preferredSize: Size.fromHeight(200),
-        child: MyAppbar(),
-         ),
+           child:  MyAppbar(),
+
          height: 250,
          width: 500,
          ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Container(
-            decoration: BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
+            child: Expanded(child: Container(
+              //container holding the main body
+            decoration: BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(80)),
             color: Color(0xffFBF0EA),
             
             ),
             child: Align(alignment: Alignment.topCenter,
-            child: Row(children: [Container(
-              decoration: BoxDecoration(borderRadius:BorderRadius.all(Radius.circular(10)),color: Colors.grey,),
-              height: 80,
-              width: 80,
-            
-              )],
-              
-              ),
+            child:StreamBuilder<QuerySnapshot>(
+              //future: users.doc('bmUlp2nAWAj9uJcV79sc').get(),
+              stream: usersStream,
+              builder:(BuildContext context, AsyncSnapshot <QuerySnapshot> snapshot){
+                if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+        }
+        return ListView(
+          scrollDirection: Axis.horizontal,
+          children: snapshot.data!.docs.map((DocumentSnapshot document) {
+          Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+          
+            return Avatar(name: data['name']);
+          }).toList(),
+        );
+        
+              } ,
+            )
+            //child: UsersRow()
+              // child: Column(children: [
+              //   ElevatedButton(child: Text('click'),onPressed: getData,),
+              //   ElevatedButton(onPressed: ()=>print(name['name']), child: Text('log'))
+              // ],)
             ),
-            width: 292,
-            height: 270,
-          ) ,
+            width: 390,
+            height: 650,
+          ) ,)
           
           )
            
