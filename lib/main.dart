@@ -1,18 +1,21 @@
-import 'dart:html';
+//import 'dart:html';
 
 import 'package:flutter/material.dart';
 import 'package:lodger/appbar.dart';
-import 'package:lodger/usersRow.dart';
-import 'package:mongo_dart/mongo_dart.dart'  show Db, DbCollection;
-import 'package:http/http.dart' as http;
-import 'dart:async';
-import 'dart:convert';
-import 'dart:developer' as developer;
+//import 'package:lodger/usersRow.dart';
+//import 'package:mongo_dart/mongo_dart.dart'  show Db, DbCollection;
+//import 'package:http/http.dart' as http;
+//import 'dart:async';
+//import 'dart:convert';
+//import 'dart:developer' as developer;
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:developer';
+//import 'dart:developer';
 import 'package:lodger/components/avatar.dart';
+import 'package:lodger/components/rooms.dart';
+
+
 
 
 void main() async {
@@ -132,6 +135,85 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+class Home extends StatelessWidget {
+Stream<QuerySnapshot>? usersStream;
+  Home({Key? key, this.usersStream});
+  @override
+
+  Widget build(BuildContext context){
+    // return Column(children: [
+      
+    // ],);
+    return Stack(
+
+      children: [UserRow(usersStream: usersStream,),
+     Align(
+       alignment: Alignment.center,
+       child: Container(
+        //alignment: Alignment.bottomCenter,
+        child: Container(alignment: Alignment.center,
+        child: Text('messages'),
+        ),
+        decoration: BoxDecoration(color: Colors.grey,borderRadius: BorderRadius.all(Radius.circular(20))),
+        width: 350,
+        height: 400,
+        margin: EdgeInsets.only(top:100),
+        
+      )
+     )
+      ],
+    );
+  }
+}
+
+
+
+class UserRow extends StatelessWidget {
+  Stream<QuerySnapshot>? usersStream;
+  UserRow({Key? key, this.usersStream});
+
+  @override 
+  Widget build(BuildContext context){
+    return Align(alignment: Alignment.topCenter,
+            child:StreamBuilder<QuerySnapshot>(
+              //future: users.doc('bmUlp2nAWAj9uJcV79sc').get(),
+              stream: usersStream,
+              builder:(BuildContext context, AsyncSnapshot <QuerySnapshot> snapshot){
+                if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+        }
+        return ListView(
+          scrollDirection: Axis.horizontal,
+          children: snapshot.data!.docs.map((DocumentSnapshot document) {
+          Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+          
+            return  Align(
+              alignment: Alignment.topCenter,
+              
+              child: Avatar(name: data['name'],room: 13,),
+              //child: Container(child: Text('user'),),
+              
+            );
+          }).toList(),
+        );
+        
+              } ,
+              
+            )
+            
+            );
+
+    //return Center();
+  }
+}
+
+
+
 class MyHomePage extends StatefulWidget {
 
   @override 
@@ -155,9 +237,28 @@ class _HomePageState extends State<MyHomePage> {
   // always marked "final".
 
   String? title;
-  // _HomePageState(){
-  //   getData();
-  // }
+  //Stream<QuerySnapshot>? userStream;
+
+  final Stream<QuerySnapshot> userStream = FirebaseFirestore.instance.collection('users').snapshots();
+
+  //final Stream<QuerySnapshot> roomStream = FirebaseFirestore.instance.collection('rooms').snapshots();
+  
+
+ int _selectedIndex=0;
+ CollectionReference users=FirebaseFirestore.instance.collection('users');
+  
+ 
+  
+
+
+  //bottom navbar handler
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
 
   bool drawerOpen=false;
   var name;
@@ -168,6 +269,11 @@ class _HomePageState extends State<MyHomePage> {
     //data.getUsers();
     print('ludex gundyr');
   }
+
+  
+
+  
+
   
   AddUser addUser=AddUser(
     name: 'judith',
@@ -177,30 +283,14 @@ class _HomePageState extends State<MyHomePage> {
     paid: true,
     
   );
-  CollectionReference users=FirebaseFirestore.instance.collection('users');
   
-  // getData() async{
-  //   return await users.doc('bmUlp2nAWAj9uJcV79sc').get()
-  //   .then((DocumentSnapshot snapshot){
-  //       //  setState(() {
-  //       //    name=snapshot.data();
-  //       //  });
-  //       //  //var name1=snapshot['name'].data();
-  //       //    print(name);
-  //          //print(name1);
-  //          print('gotten data');
-  //   })
-  //   .catchError((e){
-  //     print(e);
-  //     print('error');
-  //   });
-  // }
-
-  
-final Stream<QuerySnapshot> usersStream = FirebaseFirestore.instance.collection('users').snapshots();
 
   @override
   Widget build(BuildContext context){
+     List<Widget> screens=[
+    Home(usersStream: userStream),
+    Rooms(),
+  ];
     return Scaffold(
 
         body: Stack(children:<Widget> [
@@ -213,48 +303,57 @@ final Stream<QuerySnapshot> usersStream = FirebaseFirestore.instance.collection(
           Align(
             alignment: Alignment.bottomCenter,
             child: Expanded(child: Container(
+              padding: EdgeInsets.only(top: 20,left: 10,right: 10),
               //container holding the main body
-            decoration: BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(80)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(120)),
             color: Color(0xffFBF0EA),
             
+            
             ),
-            child: Align(alignment: Alignment.topCenter,
-            child:StreamBuilder<QuerySnapshot>(
-              //future: users.doc('bmUlp2nAWAj9uJcV79sc').get(),
-              stream: usersStream,
-              builder:(BuildContext context, AsyncSnapshot <QuerySnapshot> snapshot){
-                if (snapshot.hasError) {
-          return Text("Something went wrong");
-        }
-
-                if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
-        }
-        return ListView(
-          scrollDirection: Axis.horizontal,
-          children: snapshot.data!.docs.map((DocumentSnapshot document) {
-          Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-          
-            return Avatar(name: data['name']);
-          }).toList(),
-        );
-        
-              } ,
-            )
-            //child: UsersRow()
-              // child: Column(children: [
-              //   ElevatedButton(child: Text('click'),onPressed: getData,),
-              //   ElevatedButton(onPressed: ()=>print(name['name']), child: Text('log'))
-              // ],)
-            ),
+            //child: screens[0],
+            child: screens.elementAt(_selectedIndex),
+            //child: Home(usersStream: userStream),
             width: 390,
-            height: 650,
+            height: 600,
           ) ,)
           
           )
            
-        ],)
+        ],),
+
+        bottomNavigationBar:BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+
+            backgroundColor: Color(0xffFB9555),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Business',
+             backgroundColor: Color(0xffFB9555),
+
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.school),
+            label: 'School',
+            backgroundColor: Color(0xffFB9555),
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.settings),
+            label: 'Settings',
+             backgroundColor: Color(0xffFB9555),
+          ),
+        ],
+
+        currentIndex: _selectedIndex,
+        selectedItemColor: Color(0xffDC4749),
+        onTap: _onItemTapped,
+      ),
     );
+
+    
   }
 }
 
