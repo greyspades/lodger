@@ -16,8 +16,9 @@ class Avatar extends StatelessWidget {
   Widget build(BuildContext context){
 
     return Container(
-      margin: const EdgeInsets.only(left: 17,right: 17),
+      margin: const EdgeInsets.only(left: 17,right: 17,),
       //color: Colors.red,
+      //padding: EdgeInsets.all(5),
       height: 120,
       child: Column(
         
@@ -30,13 +31,13 @@ class Avatar extends StatelessWidget {
           width: 100,
           height: 100,
           //color: Colors.red,
-          child:IconButton(onPressed: handle, icon: const Icon(Icons.face,size:90),),
+          child:IconButton(onPressed: handle, icon: const Icon(Icons.face,size:90),color: Color(0xff9F3647),),
           
         ),
 
       //user name
        
-       Flexible(flex: 2, child:  Text(name,
+       Flexible(flex: 1, child:  Text(name,
        textAlign: TextAlign.center,style: const TextStyle(decoration:TextDecoration.none ),),)
       
 

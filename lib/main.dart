@@ -14,6 +14,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'dart:developer';
 import 'package:lodger/components/avatar.dart';
 import 'package:lodger/components/rooms.dart';
+import 'package:lodger/components/room.dart';
+import 'package:lodger/screens/roomdetails.dart';
+import 'package:lodger/screens/login.dart';
+import 'package:lodger/components/searchbar.dart';
 
 
 
@@ -90,31 +94,36 @@ class AddUser extends StatelessWidget {
 
 
 
-class User {
-  final String? name;
-  final String? room;
-  final String? rent;
-  final bool? paid;
+// class User {
+//   final String? name;
+//   final String? room;
+//   final String? rent;
+//   final bool? paid;
 
-  User({this.name, this.room, this.rent, this.paid});
+//   User({this.name, this.room, this.rent, this.paid});
 
   
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      name: json['name'],
-      room: json['room'],
-      rent: json['rent'],
-      paid: json['paid']
+//   factory User.fromJson(Map<String, dynamic> json) {
+//     return User(
+//       name: json['name'],
+//       room: json['room'],
+//       rent: json['rent'],
+//       paid: json['paid']
     
-    );
-  }
-   Map<String, dynamic> toJson() => {
-    "name": name,
-    "room": room,
-  };
+//     );
+//   }
+//    Map<String, dynamic> toJson() => {
+//     "name": name,
+//     "room": room,
+//   };
 
-}
+// }
+
+
+
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -127,9 +136,13 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
 
-        primarySwatch: Colors.blue,
+        //primarySwatch: Colors.blue,
       ),
       home: MyHomePage(),
+      routes:  <String, WidgetBuilder>{
+        '/a': (BuildContext context) => MyHomePage(),
+        '/b': (BuildContext context) => RoomDetails(),
+      },
       
     );
   }
@@ -145,7 +158,10 @@ Stream<QuerySnapshot>? usersStream;
     // return Column(children: [
       
     // ],);
-    return Stack(
+    return Container(
+      decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))),
+      //color: Colors.grey,
+      child: Stack(
 
       children: [UserRow(usersStream: usersStream,),
      Align(
@@ -155,14 +171,15 @@ Stream<QuerySnapshot>? usersStream;
         child: Container(alignment: Alignment.center,
         child: Text('messages'),
         ),
-        decoration: BoxDecoration(color: Colors.grey,borderRadius: BorderRadius.all(Radius.circular(20))),
+        decoration: BoxDecoration(color: Color(0xffFABE99),borderRadius: BorderRadius.all(Radius.circular(20))),
         width: 350,
-        height: 400,
+        height: 300,
         margin: EdgeInsets.only(top:100),
         
       )
      )
       ],
+    ),
     );
   }
 }
@@ -271,10 +288,6 @@ class _HomePageState extends State<MyHomePage> {
   }
 
   
-
-  
-
-  
   AddUser addUser=AddUser(
     name: 'judith',
     room: 'c9',
@@ -290,23 +303,32 @@ class _HomePageState extends State<MyHomePage> {
      List<Widget> screens=[
     Home(usersStream: userStream),
     Rooms(),
+    //Login(),
   ];
     return Scaffold(
 
         body: Stack(children:<Widget> [
          Container(
            child:  MyAppbar(),
-
-         height: 250,
-         width: 500,
+          color: Color(0xff9F3647),
+         height: 300,
+         width: 550,
          ),
+
+          SearchBar(),
+          
           Align(
             alignment: Alignment.bottomCenter,
             child: Expanded(child: Container(
-              padding: EdgeInsets.only(top: 20,left: 10,right: 10),
+              padding: EdgeInsets.only(
+                //top: 5,
+                //left: 10
+                //,right: 10
+                ),
               //container holding the main body
-            decoration: BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(120)),
+            decoration: BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(60)),
             color: Color(0xffFBF0EA),
+            //color: Colors.green
             
             
             ),
@@ -314,7 +336,7 @@ class _HomePageState extends State<MyHomePage> {
             child: screens.elementAt(_selectedIndex),
             //child: Home(usersStream: userStream),
             width: 390,
-            height: 600,
+            height: 520,
           ) ,)
           
           )
@@ -330,19 +352,19 @@ class _HomePageState extends State<MyHomePage> {
             backgroundColor: Color(0xffFB9555),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.business),
-            label: 'Business',
+            icon: Icon(Icons.sensor_door),
+            label: 'Rooms',
              backgroundColor: Color(0xffFB9555),
 
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.school),
-            label: 'School',
+            icon: Icon(Icons.home_repair_service),
+            label: 'Problems',
             backgroundColor: Color(0xffFB9555),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.article),
+            label: 'Requests',
              backgroundColor: Color(0xffFB9555),
           ),
         ],

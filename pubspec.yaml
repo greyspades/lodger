@@ -38,6 +38,7 @@ dependencies:
   http: ^0.13.4
   firebase_core: ^1.11.0
   cloud_firestore: ^3.1.6
+  flutter_material_pickers: ^3.1.2
   #http: ^0.13.3
 
 dev_dependencies:
