@@ -18,6 +18,7 @@ import 'package:lodger/components/room.dart';
 import 'package:lodger/screens/roomdetails.dart';
 import 'package:lodger/screens/login.dart';
 import 'package:lodger/components/searchbar.dart';
+import 'package:flutter_picker/flutter_picker.dart';
 
 
 
@@ -202,7 +203,10 @@ class UserRow extends StatelessWidget {
         }
 
                 if (snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
+          return Container(
+            margin: EdgeInsets.only(top: 20),
+            child: CircularProgressIndicator(color: Color(0xff9F3647),)
+          );
         }
         return ListView(
           scrollDirection: Axis.horizontal,

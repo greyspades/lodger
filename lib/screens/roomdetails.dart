@@ -11,20 +11,21 @@ class RoomDetails extends StatefulWidget {
   bool? water;
   bool? power;
   int? owing;
+  bool? user;
 
 
-  RoomDetails({@required this.number,@required this.occupants, @required this.floor, @required this.paid, @required this.status, this.problems,this.icon, this.owing,this.power,this.water });
+  RoomDetails({@required this.number,@required this.occupants, @required this.floor, @required this.paid, @required this.status, this.problems,this.icon, this.owing,this.power,this.water,this.user });
 
   @override
 
-  RoomDetailState createState()=>RoomDetailState(paid: paid,problems: problems,owing:owing);
+  RoomDetailState createState()=>RoomDetailState(paid: paid,problems: problems,owing:owing,user:user,occupants:occupants);
 }
 
 
 class RoomDetailState extends State<RoomDetails>{
   
   bool? paid;
-  RoomDetailState({Key? key,this.paid,this.problems,this.owing});
+  RoomDetailState({Key? key,this.paid,this.problems,this.owing,this.user,this.occupants});
 
   String? stat;
   IconData? powerIcon;
@@ -33,6 +34,8 @@ class RoomDetailState extends State<RoomDetails>{
   IconData? statusIcon;
   List? problems;
   int? owing;
+  bool? user;
+  List? occupants;
   
 
   @override 
@@ -155,6 +158,37 @@ else if(widget.status==false){
               
             ]),
           ),
+          //   Container(
+          //   child: user! ? ListView(
+          //     scrollDirection: Axis.horizontal,
+
+          //     children:occupants!.map((e){
+          //         return ListTile(
+          //       title: Text(e),
+          //     );
+          //   }).toList()): Text('no access')
+          // ),
+          Container(
+            //color: Colors.blue,
+            height: 50,
+            //margin: EdgeInsets.all(20),
+            child: (user ?? false) ? ListView(
+              scrollDirection: Axis.horizontal,
+
+              children:occupants!.map((e){
+              //     return ListTile(
+              //   title: Text(e,TextStyle(color: Colors.black),),
+              // );
+              return Container(
+                alignment: Alignment.center,
+                width: 100,
+                margin: EdgeInsets.all(10),
+                decoration: BoxDecoration(color:Color(0xff9F3647),borderRadius: BorderRadius.all(Radius.circular(5)) ),
+                child: Text(e,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20),),
+              );
+            }).toList()) : null
+          ),
+         
 
           Container(
             height: 70,
