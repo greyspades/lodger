@@ -8,6 +8,8 @@ import 'package:lodger/components/pickerData.dart';
 import 'package:lodger/screens/profile.dart';
 import 'package:lodger/components/room.dart';
 import 'package:lodger/screens/roomdetails.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:lodger/screens/roominfo.dart';
 
 //import 'PickerData.dart';
 
@@ -61,32 +63,44 @@ class LoginState extends State<Login>{
   CollectionReference rooms=FirebaseFirestore.instance.collection('rooms');
   
   Future login() async {
+    final SharedPreferences prefs = await _prefs;
     users.where('name',isEqualTo: nameValue).get()
     .then((QuerySnapshot value){
 
       
-       
       if(value.docs[0]['password']==passwordValue){
         print('passwords match');
+        prefs.setBool('logged in',true);
+        prefs.setString('room',roomControler ?? '');
+        prefs.setString('user',nameValue ?? '');
         setState(() {
         loading=false;
       });
       rooms.where('room', isEqualTo: roomControler).get()
       .then((QuerySnapshot data){
         //print(data.docs[0]['occupants']);
-          Navigator.push(context,MaterialPageRoute(builder: (context)=>RoomDetails(floor: data.docs[0]['floor'], number: data.docs[0]['number'],paid: data.docs[0]['paid'],status: data.docs[0]['status'],
+          Navigator.push(context,MaterialPageRoute(builder: (context)=>Info(floor: data.docs[0]['floor'], number: data.docs[0]['number'],paid: data.docs[0]['paid'],status: data.docs[0]['status'],
             power: data.docs[0]['power'], water: data.docs[0]['water']
             ,owing: data.docs[0]['owing']
             ,occupants:data.docs[0]['occupants'],problems:data.docs[0]['problems'],user:true
              
             )
            ));
+      })
+      .catchError((e){
+        print(e);
+        setState(() {
+          loading=false;
+        });
       });
 
       //Navigator.push(context, MaterialPageRoute(builder: (context)=>Profile(name:value.docs[0]['name'] ,owing: value.docs[0]['owing'],paid: value.docs[0]['paid'],rent: value.docs[0]['rent'],room: value.docs[0]['room'],)));
       }
       else {
         print('wrong password');
+        setState(() {
+          loading=false;
+        });
       }
       
     });
@@ -118,8 +132,14 @@ class LoginState extends State<Login>{
         }
     ).showDialog(context);
   }
-  
 
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+
+  setInfo() async{
+     final SharedPreferences prefs = await _prefs;
+     prefs.setBool('logged in', true);
+  }
+  
   @override 
   Widget build(BuildContext context){
     return Scaffold(

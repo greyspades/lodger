@@ -128,7 +128,7 @@ static String floorNumber='A';
             return Room(floor: data['floor'], number: data['number'],paid: data['paid'],status: data['status'],
             power: data['power'], water: data['water']
             ,owing: data['owing']
-            ,occupants:data['occupants'],problems:data['problems']
+            ,occupants:data['occupants'],problems:data['problems'],room:data['room'],id:data['id'],
              
             );
           }).toList(),

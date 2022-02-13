@@ -19,6 +19,8 @@ import 'package:lodger/screens/roomdetails.dart';
 import 'package:lodger/screens/login.dart';
 import 'package:lodger/components/searchbar.dart';
 import 'package:flutter_picker/flutter_picker.dart';
+import 'package:lodger/screens/roominfo.dart';
+
 
 
 
@@ -28,6 +30,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  
 
   runApp(const MyApp());
 }
@@ -307,6 +310,7 @@ class _HomePageState extends State<MyHomePage> {
      List<Widget> screens=[
     Home(usersStream: userStream),
     Rooms(),
+    Info(),
     //Login(),
   ];
     return Scaffold(
@@ -353,28 +357,28 @@ class _HomePageState extends State<MyHomePage> {
             icon: Icon(Icons.home),
             label: 'Home',
 
-            backgroundColor: Color(0xffFB9555),
+            backgroundColor: Color(0xff9F3647),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.sensor_door),
             label: 'Rooms',
-             backgroundColor: Color(0xffFB9555),
+             backgroundColor: Color(0xff9F3647),
 
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.home_repair_service),
             label: 'Problems',
-            backgroundColor: Color(0xffFB9555),
+            backgroundColor: Color(0xff9F3647),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.article),
             label: 'Requests',
-             backgroundColor: Color(0xffFB9555),
+             backgroundColor:Color(0xff9F3647) ,
           ),
         ],
 
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xffDC4749),
+        selectedItemColor: Color(0xffFB9555),
         onTap: _onItemTapped,
       ),
     );

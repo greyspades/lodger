@@ -5,6 +5,7 @@ import 'package:lodger/screens/login.dart';
 import 'package:mongo_dart/mongo_dart.dart'  show Db, DbCollection;
 import 'package:path/path.dart';
 import 'package:lodger/screens/login.dart';
+import 'package:lodger/screens/roominfo.dart';
 
 
 class MyAppbar extends StatefulWidget {
@@ -36,8 +37,10 @@ class _AppbarState extends State<MyAppbar> {
           
           child:IconButton(icon: Icon(Icons.menu,size: 40,
           
-           color: const Color(0xffAD714C),),
-           onPressed: toggleDrawer(),
+           color: Color(0xff9F3647),),
+           onPressed: (){
+             Navigator.push(context, MaterialPageRoute(builder: (context)=>Info()));
+           },
            
            )),
           flexibleSpace: Image(
@@ -47,7 +50,7 @@ class _AppbarState extends State<MyAppbar> {
           ),
 
           actions: [Align(alignment: Alignment.topRight,
-          child: IconButton(icon: Icon(Icons.account_circle,color: Color(0xffAD714C),size: 40,),onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>Login()));
+          child: IconButton(icon: Icon(Icons.account_circle,color:Color(0xff9F3647),size: 40,),onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>Login()));
           
           },),)],
     );
