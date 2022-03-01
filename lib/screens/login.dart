@@ -1,4 +1,4 @@
-import 'dart:html';
+
 import 'dart:convert';
 import 'package:flutter/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -62,7 +62,7 @@ class LoginState extends State<Login>{
 
   CollectionReference rooms=FirebaseFirestore.instance.collection('rooms');
   
-  Future login() async {
+  Future<void> login() async {
     final SharedPreferences prefs = await _prefs;
     users.where('name',isEqualTo: nameValue).get()
     .then((QuerySnapshot value){
@@ -77,7 +77,23 @@ class LoginState extends State<Login>{
         loading=false;
       });
       rooms.where('room', isEqualTo: roomControler).get()
-      .then((QuerySnapshot data){
+      .then((QuerySnapshot data)async{
+        prefs.setBool('paid', data.docs[0]['paid']);
+        prefs.setBool('status', data.docs[0]['status']);
+        prefs.setInt('owing', data.docs[0]['owing']);
+        String? prob=json.encode(data.docs[0]['problems']);
+        String? mates=json.encode(data.docs[0]['problems']);
+        //prefs.setString('occupants',json.encode(data.docs[0]['occupants']) );
+        prefs.setString('problems', prob);
+        prefs.setString('occupants', mates);
+        //prefs.setStringList('problems', data.docs[0]['problems']);
+        prefs.setString('floor', data.docs[0]['floor']);
+        prefs.setString('room', data.docs[0]['room']);
+        //prefs.setString('mail',json.encode(data.docs[0]['mail']).toString());
+
+       
+
+        //prefs.setString('info', json.encode(data.docs[0]));
         //print(data.docs[0]['occupants']);
           Navigator.push(context,MaterialPageRoute(builder: (context)=>Info(floor: data.docs[0]['floor'], number: data.docs[0]['number'],paid: data.docs[0]['paid'],status: data.docs[0]['status'],
             power: data.docs[0]['power'], water: data.docs[0]['water']
@@ -170,10 +186,11 @@ class LoginState extends State<Login>{
 
                Container(
                  width: 350,
+                 
 
                  margin: EdgeInsets.only(left: 30,right: 30,top: 30),
                  child: Form(child: TextFormField(
-                   
+                    
                      cursorColor: Color(0xff9F3647),
                      controller: myController,
                       onChanged: (String value){
@@ -184,7 +201,7 @@ class LoginState extends State<Login>{
                       },
                    decoration: InputDecoration(
                      prefixIcon: Icon(Icons.person),
-                     
+                     //contentPadding: EdgeInsets.only(top: 25,bottom: 25),
                      focusedBorder: OutlineInputBorder(
                        borderRadius: BorderRadius.all(Radius.circular(20)),
                   borderSide: BorderSide(color: Colors.red, width: 2.0),
@@ -195,7 +212,7 @@ class LoginState extends State<Login>{
                   borderSide: BorderSide(color: Color(0xff9F3647), width: 2.0),
                 ),
                      focusColor: Color(0xff9F3647),
-
+                    
                      hintText: 'Your name',
                      filled: true,
                      fillColor: Color(0xffFABE99),
@@ -297,41 +314,44 @@ class LoginState extends State<Login>{
                  ),
                ),
 
+              Container(
+                height: 100,
 
+              )
 
-               Container(
-                 margin: EdgeInsets.only(top: 1),
-                 alignment: Alignment.center,
-                 child: Row(
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   children: [
-                   Container(
-                     margin: EdgeInsets.all(20),
-                     width: 60,
-                     height: 60,
+              //  Container(
+              //    margin: EdgeInsets.only(top: 100),
+              //    alignment: Alignment.center,
+              //    child: Row(
+              //      mainAxisAlignment: MainAxisAlignment.center,
+              //      children: [
+              //      Container(
+              //        margin: EdgeInsets.all(20),
+              //        width: 60,
+              //        height: 60,
                      
-                     decoration: BoxDecoration(color: Color(0xffFABE99),borderRadius: BorderRadius.all(Radius.circular(10))),
-                   ),
+              //        decoration: BoxDecoration(color: Color(0xffFABE99),borderRadius: BorderRadius.all(Radius.circular(10))),
+              //      ),
 
-                   Container(
-                     margin: EdgeInsets.all(20),
-                     width: 60,
-                     height: 60,
+              //      Container(
+              //        margin: EdgeInsets.all(20),
+              //        width: 60,
+              //        height: 60,
                      
-                     decoration: BoxDecoration(color: Color(0xffFABE99),borderRadius: BorderRadius.all(Radius.circular(10))),
-                   ),
+              //        decoration: BoxDecoration(color: Color(0xffFABE99),borderRadius: BorderRadius.all(Radius.circular(10))),
+              //      ),
 
-                   Container(
-                     margin: EdgeInsets.all(20),
-                     width: 60,
-                     height: 60,
+              //      Container(
+              //        margin: EdgeInsets.all(20),
+              //        width: 60,
+              //        height: 60,
                      
-                     decoration: BoxDecoration(color: Color(0xffFABE99),borderRadius: BorderRadius.all(Radius.circular(10))),
-                   ),
+              //        decoration: BoxDecoration(color: Color(0xffFABE99),borderRadius: BorderRadius.all(Radius.circular(10))),
+              //      ),
 
                    
-                 ]),
-               )
+              //    ]),
+              //  )
                 
                //form
       //          Container(

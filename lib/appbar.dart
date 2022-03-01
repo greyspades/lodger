@@ -31,6 +31,7 @@ class _AppbarState extends State<MyAppbar> {
 
   Widget build(BuildContext context){
     return AppBar(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(bottom: Radius.circular(100))),
         elevation: 0,
           //toolbarHeight: 200,
           leading: Align(alignment: Alignment.topLeft,
@@ -43,11 +44,13 @@ class _AppbarState extends State<MyAppbar> {
            },
            
            )),
-          flexibleSpace: Image(
+          flexibleSpace: ClipRRect(
+            borderRadius: BorderRadius.vertical(bottom: Radius.circular(80)),
+            child: Image(
            // height: 500,
             image:const AssetImage('images/background.jpg'), 
             fit: BoxFit.cover,
-          ),
+          ),),
 
           actions: [Align(alignment: Alignment.topRight,
           child: IconButton(icon: Icon(Icons.account_circle,color:Color(0xff9F3647),size: 40,),onPressed: (){Navigator.push(context,MaterialPageRoute(builder: (context)=>Login()));

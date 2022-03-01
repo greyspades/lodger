@@ -20,6 +20,7 @@ import 'package:lodger/screens/login.dart';
 import 'package:lodger/components/searchbar.dart';
 import 'package:flutter_picker/flutter_picker.dart';
 import 'package:lodger/screens/roominfo.dart';
+import 'package:lodger/screens/home.dart';
 
 
 
@@ -153,88 +154,11 @@ class MyApp extends StatelessWidget {
 }
 
 
-class Home extends StatelessWidget {
-Stream<QuerySnapshot>? usersStream;
-  Home({Key? key, this.usersStream});
-  @override
-
-  Widget build(BuildContext context){
-    // return Column(children: [
-      
-    // ],);
-    return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20))),
-      //color: Colors.grey,
-      child: Stack(
-
-      children: [UserRow(usersStream: usersStream,),
-     Align(
-       alignment: Alignment.center,
-       child: Container(
-        //alignment: Alignment.bottomCenter,
-        child: Container(alignment: Alignment.center,
-        child: Text('messages'),
-        ),
-        decoration: BoxDecoration(color: Color(0xffFABE99),borderRadius: BorderRadius.all(Radius.circular(20))),
-        width: 350,
-        height: 300,
-        margin: EdgeInsets.only(top:100),
-        
-      )
-     )
-      ],
-    ),
-    );
-  }
-}
 
 
 
-class UserRow extends StatelessWidget {
-  Stream<QuerySnapshot>? usersStream;
-  UserRow({Key? key, this.usersStream});
 
-  @override 
-  Widget build(BuildContext context){
-    return Align(alignment: Alignment.topCenter,
-            child:StreamBuilder<QuerySnapshot>(
-              //future: users.doc('bmUlp2nAWAj9uJcV79sc').get(),
-              stream: usersStream,
-              builder:(BuildContext context, AsyncSnapshot <QuerySnapshot> snapshot){
-                if (snapshot.hasError) {
-          return Text("Something went wrong");
-        }
 
-                if (snapshot.connectionState == ConnectionState.waiting) {
-          return Container(
-            margin: EdgeInsets.only(top: 20),
-            child: CircularProgressIndicator(color: Color(0xff9F3647),)
-          );
-        }
-        return ListView(
-          scrollDirection: Axis.horizontal,
-          children: snapshot.data!.docs.map((DocumentSnapshot document) {
-          Map<String, dynamic> data = document.data() as Map<String, dynamic>;
-          
-            return  Align(
-              alignment: Alignment.topCenter,
-              
-              child: Avatar(name: data['name'],room: 13,),
-              //child: Container(child: Text('user'),),
-              
-            );
-          }).toList(),
-        );
-        
-              } ,
-              
-            )
-            
-            );
-
-    //return Center();
-  }
-}
 
 
 
@@ -315,41 +239,7 @@ class _HomePageState extends State<MyHomePage> {
   ];
     return Scaffold(
 
-        body: Stack(children:<Widget> [
-         Container(
-           child:  MyAppbar(),
-          color: Color(0xff9F3647),
-         height: 300,
-         width: 550,
-         ),
-
-          SearchBar(),
-          
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Expanded(child: Container(
-              padding: EdgeInsets.only(
-                //top: 5,
-                //left: 10
-                //,right: 10
-                ),
-              //container holding the main body
-            decoration: BoxDecoration(borderRadius: BorderRadius.vertical(top: Radius.circular(60)),
-            color: Color(0xffFBF0EA),
-            //color: Colors.green
-            
-            
-            ),
-            //child: screens[0],
-            child: screens.elementAt(_selectedIndex),
-            //child: Home(usersStream: userStream),
-            width: 390,
-            height: 520,
-          ) ,)
-          
-          )
-           
-        ],),
+        body:  screens.elementAt(_selectedIndex),
 
         bottomNavigationBar:BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
