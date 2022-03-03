@@ -7,7 +7,7 @@ import 'package:lodger/components/room.dart';
 import 'package:lodger/components/avatar.dart';
 import 'package:lodger/appbar.dart';
 import 'package:lodger/components/searchbar.dart';
-
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 
 
