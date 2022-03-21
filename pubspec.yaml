@@ -65,8 +65,8 @@ dev_dependencies:
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
-dependacy_overrides:
-  firebase_storage: 10.2.9
+# dependacy_overrides:
+#   firebase_storage: 10.2.7
 
 
 

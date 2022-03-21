@@ -83,18 +83,13 @@ class LoginState extends State<Login>{
         prefs.setInt('owing', data.docs[0]['owing']);
         String? prob=json.encode(data.docs[0]['problems']);
         String? mates=json.encode(data.docs[0]['problems']);
-        //prefs.setString('occupants',json.encode(data.docs[0]['occupants']) );
+       
         prefs.setString('problems', prob);
         prefs.setString('occupants', mates);
-        //prefs.setStringList('problems', data.docs[0]['problems']);
+       
         prefs.setString('floor', data.docs[0]['floor']);
         prefs.setString('room', data.docs[0]['room']);
-        //prefs.setString('mail',json.encode(data.docs[0]['mail']).toString());
-
        
-
-        //prefs.setString('info', json.encode(data.docs[0]));
-        //print(data.docs[0]['occupants']);
           Navigator.push(context,MaterialPageRoute(builder: (context)=>Info(floor: data.docs[0]['floor'], number: data.docs[0]['number'],paid: data.docs[0]['paid'],status: data.docs[0]['status'],
             power: data.docs[0]['power'], water: data.docs[0]['water']
             ,owing: data.docs[0]['owing']
