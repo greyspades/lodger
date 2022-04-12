@@ -7,11 +7,13 @@ import 'package:lodger/components/room.dart';
 import 'package:lodger/components/avatar.dart';
 import 'package:lodger/appbar.dart';
 import 'package:lodger/components/searchbar.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:firebase_storage/firebase_storage.dart';
 
 
 
-//listview for the users
+//*listview for the users
+
+
 class UserRow extends StatelessWidget {
   Stream<QuerySnapshot>? usersStream;
   UserRow({Key? key, this.usersStream});
@@ -61,12 +63,27 @@ class UserRow extends StatelessWidget {
 class Home extends StatelessWidget {
 Stream<QuerySnapshot>? usersStream;
   Home({Key? key, this.usersStream});
+
+  Future<String> getImage()async{
+
+    //* ref for targeting the firebase storage bucket
+    final storage=FirebaseStorage.instance.refFromURL('gs://lodger-bf115.appspot.com/room1.jpg');
+
+    final image=storage.child('gs://lodger-bf115.appspot.com/room1.jpg');
+
+    final items=await image.listAll();
+
+    String url=await storage.getDownloadURL();
+
+    //print('the items are $image');
+    print('the url is ${url.toString()}');
+    return url.toString();
+  }
   @override
 
   Widget build(BuildContext context){
-    // return Column(children: [
-      
-    // ],);
+    
+
     return Container(
       color: Color(0xffFABE99),
       child: Stack(children: [
@@ -90,7 +107,7 @@ Stream<QuerySnapshot>? usersStream;
              children: [
              Container(
                margin: EdgeInsets.only(top: 30),
-               height: 100,
+               height: 250,
                child: ListView(
                  
                scrollDirection: Axis.horizontal,
@@ -98,9 +115,16 @@ Stream<QuerySnapshot>? usersStream;
 
                 Container(
                   margin: EdgeInsets.only(left: 10,right: 10),
+                  height: 250,
+                  width: 200,
                   child: ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Color(0xff5D2749),fixedSize: Size(100,100),shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
-                onPressed: (){}, child:Text('')),
+                style: ElevatedButton.styleFrom(
+                  primary: Color(0xffffff),
+                  fixedSize: Size(150,200),shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+                onPressed: (){
+                  print(getImage());
+                }, child: Image.network('https://firebasestorage.googleapis.com/v0/b/lodger-bf115.appspot.com/o/room1.jpg?alt=media&token=e69464a0-ddfa-4443-8d65-941937d3aca7',width: 200,height: 250,),
+                ),
                 ),
 
 

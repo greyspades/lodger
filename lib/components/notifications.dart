@@ -3,9 +3,12 @@ import 'package:flutter/widgets.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:lodger/components/avatar.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+//import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:path_provider/path_provider.dart';
 import 'package:intl/intl.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as path;
 
 class Item  {
   bool? expanded;
@@ -66,6 +69,7 @@ List<Item> generateItems(int numberOfItems,  data) {
     
 
   Widget expansionPanel(AsyncSnapshot snapshot){
+    ExpandableController? expandControler;
 
     return Stack(
       children:snapshot.data!.docs.map<Widget>((DocumentSnapshot document){
@@ -93,8 +97,10 @@ List<Item> generateItems(int numberOfItems,  data) {
                   return Container(
                     color:Color(0xffFBF0EA),
                       margin: EdgeInsets.only(left: 5,right: 5,bottom: 5,top: 5),
+
                     //*expandable widget for notifications
                     child: ExpandablePanel(
+                      controller: expandControler,
                       collapsed: Container(
                     color:Color(0xff9F3647) ,
                   
@@ -132,7 +138,9 @@ List<Item> generateItems(int numberOfItems,  data) {
                       
                       margin: EdgeInsets.only(left: 5,right: 5,top:5,bottom: 5),
                       decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(5)),color: Color(0xffFBF0EA),),
-                      child: ListTile(title: Text(d['subject']),leading: CircleAvatar(),focusColor:Color(0xffFBF0EA),)
+                      child: ListTile(title: Text(d['subject']),leading: CircleAvatar(),focusColor:Color(0xffFBF0EA),onTap: (){
+                        print(expandControler?.expanded);
+                      },)
                     ),
                     ),
                   );
