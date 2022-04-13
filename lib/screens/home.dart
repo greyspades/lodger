@@ -63,6 +63,43 @@ class UserRow extends StatelessWidget {
 class Home extends StatelessWidget {
 Stream<QuerySnapshot>? usersStream;
   Home({Key? key, this.usersStream});
+CollectionReference fireRef=FirebaseFirestore.instance.collection('rooms');
+
+//* adding a new room to the database
+  Future<void> addRoom(){
+    return  fireRef.add({
+      'floor':'B',
+      'key':'room b1',
+      'number':1,
+      'owing':2000,
+      'paid':true,
+      'room':'B1',
+      'status':false,
+      'problems':['broken lock on front door'],
+      'occupants':['jessica, barbara'],
+      'mail':[{
+        'critical':false,
+        'item':'The store now has prinkles',
+        'read':false,
+        'reciever':'B1',
+        'sender':'Store',
+        'subject':'prinkles restock',
+        'time':Timestamp.now(),
+        //'time':FieldValue.serverTimestamp(),
+      },
+      {
+        'critical':false,
+        'item':'Your dry cleaning is ready. Please come to the dry cleaner to pick it up ',
+        'read':false,
+        'reciever':'B1',
+        'sender':'Dry cleaner',
+        'subject':'Dry cleaning ready',
+        'time':Timestamp.now(),
+        //'time':FieldValue.serverTimestamp(),
+      },
+      ]
+    }).then((value) => print('stored')).catchError((err)=>print(err));
+  }
 
   Future<String> getImage()async{
 
@@ -119,6 +156,7 @@ Stream<QuerySnapshot>? usersStream;
                   width: 200,
                   child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
+                  
                   primary: Color(0xffffff),
                   fixedSize: Size(150,200),shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
                 onPressed: (){
@@ -132,7 +170,9 @@ Stream<QuerySnapshot>? usersStream;
                   margin: EdgeInsets.only(left: 10,right: 10),
                   child: ElevatedButton(
                 style: ElevatedButton.styleFrom(primary: Color(0xff5D2749),fixedSize: Size(100,100),shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
-                onPressed: (){}, child:Text('')),
+                onPressed: (){
+                  addRoom();
+                }, child:Text('')),
                 ),
 
 

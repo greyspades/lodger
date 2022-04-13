@@ -236,11 +236,11 @@ class _InfoState extends State<Info> {
     getName();
 
   }
-final Stream<QuerySnapshot> mailStream = FirebaseFirestore.instance.collection('rooms').where('room',isEqualTo:'A3' ).snapshots();
+
   @override
   Widget build(BuildContext context) {
     
-
+final Stream<QuerySnapshot> mailStream = FirebaseFirestore.instance.collection('rooms').where('room',isEqualTo:number ).snapshots();
     IconData? iconSelector;
 
     if(info?['paid']==true && info?['status']==true){

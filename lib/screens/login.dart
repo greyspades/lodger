@@ -91,8 +91,8 @@ class LoginState extends State<Login>{
         prefs.setString('room', data.docs[0]['room']);
        
           Navigator.push(context,MaterialPageRoute(builder: (context)=>Info(floor: data.docs[0]['floor'], number: data.docs[0]['number'],paid: data.docs[0]['paid'],status: data.docs[0]['status'],
-            power: data.docs[0]['power'], water: data.docs[0]['water']
-            ,owing: data.docs[0]['owing']
+            
+            owing: data.docs[0]['owing']
             ,occupants:data.docs[0]['occupants'],problems:data.docs[0]['problems'],user:true
              
             )

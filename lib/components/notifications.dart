@@ -125,6 +125,7 @@ List<Item> generateItems(int numberOfItems,  data) {
                         //* notification body
                        Row(children: [
                          Container(
+                           width: 360,
                            margin: EdgeInsets.only(top: 30,bottom: 5),
                            child:  Text(d['item'],style: TextStyle(color: Colors.white),),
                          )
