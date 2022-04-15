@@ -64,10 +64,10 @@ class LoginState extends State<Login>{
   
   Future<void> login() async {
     final SharedPreferences prefs = await _prefs;
+
+    //* get the user information
     users.where('name',isEqualTo: nameValue).get()
     .then((QuerySnapshot value){
-
-      
       if(value.docs[0]['password']==passwordValue){
         print('passwords match');
         prefs.setBool('logged in',true);
@@ -76,6 +76,8 @@ class LoginState extends State<Login>{
         setState(() {
         loading=false;
       });
+
+      //* get the room information
       rooms.where('room', isEqualTo: roomControler).get()
       .then((QuerySnapshot data)async{
         prefs.setBool('paid', data.docs[0]['paid']);
@@ -91,7 +93,7 @@ class LoginState extends State<Login>{
         prefs.setString('room', data.docs[0]['room']);
        
           Navigator.push(context,MaterialPageRoute(builder: (context)=>Info(floor: data.docs[0]['floor'], number: data.docs[0]['number'],paid: data.docs[0]['paid'],status: data.docs[0]['status'],
-            
+            //mail:data.docs[0]['mail'],
             owing: data.docs[0]['owing']
             ,occupants:data.docs[0]['occupants'],problems:data.docs[0]['problems'],user:true
              

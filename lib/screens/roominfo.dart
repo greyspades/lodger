@@ -336,7 +336,8 @@ final Stream<QuerySnapshot> mailStream = FirebaseFirestore.instance.collection('
 
 
         //column for body
-        child:ListView(
+        child: Expanded(
+          child: ListView(
           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
           Container(
@@ -483,7 +484,7 @@ final Stream<QuerySnapshot> mailStream = FirebaseFirestore.instance.collection('
           
            ]),
          )
-        ]),
+        ])),
       ),
      
       ],

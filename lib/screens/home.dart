@@ -77,6 +77,7 @@ CollectionReference fireRef=FirebaseFirestore.instance.collection('rooms');
       'status':false,
       'problems':['broken lock on front door'],
       'occupants':['jessica, barbara'],
+      'image':'https://firebasestorage.googleapis.com/v0/b/lodger-bf115.appspot.com/o/room1.jpg?alt=media&token=e69464a0-ddfa-4443-8d65-941937d3aca7',
       'mail':[{
         'critical':false,
         'item':'The store now has prinkles',
