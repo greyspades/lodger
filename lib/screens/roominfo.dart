@@ -9,66 +9,7 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lodger/components/notifications.dart';
 
-class Item extends StatelessWidget {
-  Item({
-    required this.expandedValue,
-    required this.headerValue,
-    this.isExpanded = false,
-  });
 
-  String expandedValue;
-  String headerValue;
-  bool isExpanded;
-
-  @override 
-
-  Widget build(BuildContext context){
-        return Container(
-                 // height: 60,
-                  margin: EdgeInsets.all(3),
-                  child: Container(
-                    color: Colors.red,
-                    height: 60,
-                    width: 360,
-                    child: Text(headerValue),
-                  ),
-                //   child: ElevatedButton(style: ElevatedButton.styleFrom(fixedSize: Size(350, 70,),primary: Color(0xffFBF0EA),),onPressed: (){}, child: Container(
-                //   height: 60,
-                //   margin: EdgeInsets.all(3),
-                  
-                //   padding: const EdgeInsets.all(10),
-                //   child: Row(
-                //     crossAxisAlignment: CrossAxisAlignment.center,
-                //     children: [
-                //     CircleAvatar(),
-                //     Container(
-                //       margin: EdgeInsets.only(left: 10),
-                //       child: Column(
-                //       mainAxisAlignment: MainAxisAlignment.center,
-                //       children: [
-                //         Text(headerValue,style: TextStyle(fontSize: 18,fontWeight: FontWeight.w500,color: Colors.black),),
-                //       ],
-                //     ),
-                //     )
-                //   ]),
-
-
-                //   // child: ListTile(
-                    
-                //   //   leading: CircleAvatar(),title: Text(d['subject'],style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: Colors.black),)),
-                // )),
-                );
-  }
-}
-
-// List<Item> generateItems(int numberOfItems) {
-//   return List<Item>.generate(numberOfItems, (int index) {
-//     return Item(
-//       headerValue: 'Panel $index',
-//       expandedValue: 'This is item number $index',
-//     );
-//   });
-// }
 
 
 class Info extends StatefulWidget {
@@ -420,7 +361,7 @@ final Stream<QuerySnapshot> mailStream = FirebaseFirestore.instance.collection('
                     child: Row(
                       mainAxisAlignment:MainAxisAlignment.spaceBetween,
                       children:<Widget> [
-                      Text(e,style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16 ),),
+                      Text(e['item'],style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16 ),),
                       ElevatedButton(onPressed: (){}, child:Icon(Icons.build_circle),style: ElevatedButton.styleFrom(primary: Color(0xff9F3647)), )
                     ]),
                 );
@@ -428,8 +369,10 @@ final Stream<QuerySnapshot> mailStream = FirebaseFirestore.instance.collection('
             ),
           ),
 
+          //ElevatedButton(onPressed: (){print(problems);}, child: Text('print problems')),
 
-          //expansion pannel list
+
+          //* Notifications section
           Container(
             margin: EdgeInsets.only(left: 10),
             alignment: Alignment.topLeft,

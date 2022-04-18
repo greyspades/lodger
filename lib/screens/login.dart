@@ -10,6 +10,7 @@ import 'package:lodger/components/room.dart';
 import 'package:lodger/screens/roomdetails.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lodger/screens/roominfo.dart';
+import 'package:intl/intl.dart';
 
 //import 'PickerData.dart';
 
@@ -83,19 +84,35 @@ class LoginState extends State<Login>{
         prefs.setBool('paid', data.docs[0]['paid']);
         prefs.setBool('status', data.docs[0]['status']);
         prefs.setInt('owing', data.docs[0]['owing']);
-        String? prob=json.encode(data.docs[0]['problems']);
-        String? mates=json.encode(data.docs[0]['problems']);
+        
+        //String? mates=json.encode(data.docs[0]['problems']);
        
-        prefs.setString('problems', prob);
-        prefs.setString('occupants', mates);
-       
+
+        //prefs.setString('occupants', data.docs[0]['problems']);
+
+        //* converts the timestamp of the problems objects to formated time
+        List<dynamic> list= data.docs[0]['problems'].map((d){
+          return {
+            'item':d['item'],
+            'fixed':d['fixed'],
+            'time':DateFormat.yMMMd().format(d['time'].toDate())
+          } ;
+        }).toList();
+        //* encode the problems object into a json string
+        String? prob=json.encode(list);
+
+       prefs.setString('problems', prob);
+        
         prefs.setString('floor', data.docs[0]['floor']);
         prefs.setString('room', data.docs[0]['room']);
        
           Navigator.push(context,MaterialPageRoute(builder: (context)=>Info(floor: data.docs[0]['floor'], number: data.docs[0]['number'],paid: data.docs[0]['paid'],status: data.docs[0]['status'],
             //mail:data.docs[0]['mail'],
             owing: data.docs[0]['owing']
-            ,occupants:data.docs[0]['occupants'],problems:data.docs[0]['problems'],user:true
+            ,occupants:data.docs[0]['occupants'],
+            problems:data.docs[0]['problems'],
+            
+            user:true
              
             )
            ));

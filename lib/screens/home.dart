@@ -69,35 +69,58 @@ CollectionReference fireRef=FirebaseFirestore.instance.collection('rooms');
   Future<void> addRoom(){
     return  fireRef.add({
       'floor':'B',
-      'key':'room b1',
-      'number':1,
-      'owing':2000,
+      'key':'roomB12',
+      'number':12,
+      'owing':100,
       'paid':true,
-      'room':'B1',
+      'room':'B12',
       'status':false,
-      'problems':['broken lock on front door'],
-      'occupants':['jessica, barbara'],
-      'image':'https://firebasestorage.googleapis.com/v0/b/lodger-bf115.appspot.com/o/room1.jpg?alt=media&token=e69464a0-ddfa-4443-8d65-941937d3aca7',
+      'price':720,
+      'pay-date':Timestamp.now(),
+      'problems':[
+        {
+          'item':'Can hear voices at night',
+          'fixed':false,
+          'time':Timestamp.now()
+        },
+         {
+          'item':'Broken toilet',
+          'fixed':false,
+          'time':Timestamp.now()
+        }
+      ],
+      'occupants':['zainab,juliet'],
+      'image':'https://firebasestorage.googleapis.com/v0/b/lodger-bf115.appspot.com/o/room4.jpg?alt=media&token=84a9b008-a1f5-49d4-b54d-0dab0210e1aa',
       'mail':[{
         'critical':false,
-        'item':'The store now has prinkles',
+        'item':'There will be a party at the mail hall on friday night and you were invited',
         'read':false,
-        'reciever':'B1',
-        'sender':'Store',
-        'subject':'prinkles restock',
+        'reciever':'B12',
+        'sender':'management',
+        'subject':'Party on friday night',
         'time':Timestamp.now(),
-        //'time':FieldValue.serverTimestamp(),
+       
       },
       {
         'critical':false,
-        'item':'Your dry cleaning is ready. Please come to the dry cleaner to pick it up ',
+        'item':'Your ID card was found on the floor of the restaurant, please come to the security department to collect it',
         'read':false,
-        'reciever':'B1',
-        'sender':'Dry cleaner',
-        'subject':'Dry cleaning ready',
+        'reciever':'B12',
+        'sender':'Restaurant',
+        'subject':'Found your ID card',
         'time':Timestamp.now(),
-        //'time':FieldValue.serverTimestamp(),
+        
       },
+      // {
+      //   'critical':false,
+      //   'item':'',
+      //   'read':false,
+      //   'reciever':'B7',
+      //   'sender':'Littering penalty',
+      //   'subject':"You were caught littering the premisses and you have been fined ${'100'} ",
+      //   'time':Timestamp.now(),
+
+      // },
       ]
     }).then((value) => print('stored')).catchError((err)=>print(err));
   }
@@ -117,6 +140,9 @@ CollectionReference fireRef=FirebaseFirestore.instance.collection('rooms');
     print('the url is ${url.toString()}');
     return url.toString();
   }
+
+  Stream rooms=FirebaseFirestore.instance.collection('rooms').where('floor', isEqualTo: 'B').snapshots();
+
   @override
 
   Widget build(BuildContext context){
@@ -136,59 +162,136 @@ CollectionReference fireRef=FirebaseFirestore.instance.collection('rooms');
          //searchbar
          SearchBar(),
 
+         
         Align(
           alignment: Alignment.bottomCenter,
           child:  Container(
-           height: 430,
-           color: Color(0xffFABE99),
-           child:ListView(
-             children: [
+           height: 400,
+           //color: Colors.red,
+           //color: Color(0xffFABE99),
+           child: Column(children: [
              Container(
-               margin: EdgeInsets.only(top: 30),
-               height: 250,
-               child: ListView(
-                 
-               scrollDirection: Axis.horizontal,
-               children: [
+               margin: EdgeInsets.only(bottom: 10),
+           child: Text('Best rooms',style: TextStyle(fontSize: 30,fontWeight: FontWeight.bold),),
+         ),
 
-                Container(
+             StreamBuilder(
+             stream: rooms,
+             builder: (BuildContext context, AsyncSnapshot snapshot){
+                  if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+
+                if (snapshot.connectionState == ConnectionState.waiting) {
+          return Container(
+            margin: EdgeInsets.only(top: 20),
+            child: CircularProgressIndicator(color: Color(0xff9F3647),)
+          );
+            }
+            
+            return Container(
+              //color: Colors.black,
+              margin: EdgeInsets.only(bottom: 50),
+              height: 300,
+              child: ListView(
+              scrollDirection: Axis.horizontal,
+              children: snapshot.data.docs.map<Widget>((d){
+                Map<String,dynamic> data=d.data() as Map<String,dynamic>;
+
+                return Container(
+                  height: 200,
+                  width: 250,
                   margin: EdgeInsets.only(left: 10,right: 10),
-                  height: 250,
-                  width: 200,
                   child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
+                style: ElevatedButton.styleFrom(primary: Color(0xff5D2749),shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+                onPressed: (){
+                  //addRoom();
+                }, child:Column(children: [
+                  AspectRatio(
+                  aspectRatio: 230/280,
+                  child: Image.network(
+                    d['image']
+                  ,width: 200,height:230,fit: BoxFit.cover,)
                   
-                  primary: Color(0xffffff),
-                  fixedSize: Size(150,200),shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
-                onPressed: (){
-                  print(getImage());
-                }, child: Image.network('https://firebasestorage.googleapis.com/v0/b/lodger-bf115.appspot.com/o/room1.jpg?alt=media&token=e69464a0-ddfa-4443-8d65-941937d3aca7',width: 200,height: 250,),
-                ),
-                ),
-
-
-                Container(
-                  margin: EdgeInsets.only(left: 10,right: 10),
-                  child: ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Color(0xff5D2749),fixedSize: Size(100,100),shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
-                onPressed: (){
-                  addRoom();
-                }, child:Text('')),
-                ),
-
-
-                Container(
-                  margin: EdgeInsets.only(left: 10,right: 10),
-                  child: ElevatedButton(
-                style: ElevatedButton.styleFrom(primary: Color(0xff5D2749),fixedSize: Size(100,100),shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
-                onPressed: (){}, child:Text('')),
+                  ),
+                  //*room details
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                      Text(d['room'],style: TextStyle(fontSize: 20),),
+                      Text(d['price'].toString(),style: TextStyle(fontSize: 20),)
+                    
+                    ]),
+                  )
+                ],)
                 )
+                );
+              }).toList(),
+            ),
+            );
+          
+             })
+           ]),
+          //  child:ListView(
+          //    children: [
+          //    Container(
+          //      margin: EdgeInsets.only(top: 30),
+          //      height: 320,
+          //      child: ListView(
+                 
+          //      scrollDirection: Axis.horizontal,
+          //      children: [
+          //       Container(
+          //         height: 300,
+          //         width: 250,
+          //         margin: EdgeInsets.only(left: 10,right: 10),
+          //         child: ElevatedButton(
+          //       style: ElevatedButton.styleFrom(primary: Color(0xff5D2749),fixedSize: Size(200,150),shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+          //       onPressed: (){
+          //         //addRoom();
+          //       }, child:AspectRatio(
+          //         aspectRatio: 230/300,
+          //         child: Image.network(
+          //           //'https://firebasestorage.googleapis.com/v0/b/lodger-bf115.appspot.com/o/room1.jpg?alt=media&token=e69464a0-ddfa-4443-8d65-941937d3aca7'
+          //             'https://firebasestorage.googleapis.com/v0/b/lodger-bf115.appspot.com/o/room14.jpg?alt=media&token=aa52b541-b2e4-4290-8100-b18df40cbf79'
+          //         ,width: 200,height:230,fit: BoxFit.cover,)),
+          //       )
+          //       )
+          //       ,
+
+
+          //       Container(
+          //         height: 250,
+          //         width: 200,
+          //         margin: EdgeInsets.only(left: 10,right: 10),
+          //         child: ElevatedButton(
+          //       style: ElevatedButton.styleFrom(primary: Color(0xff5D2749),fixedSize: Size(200,150),shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+          //       onPressed: (){
+          //         //addRoom();
+          //       }, child:AspectRatio(
+          //         aspectRatio: 200/250,
+          //         child: Image.network('https://firebasestorage.googleapis.com/v0/b/lodger-bf115.appspot.com/o/room15.jpg?alt=media&token=8352e092-b319-4c64-ab66-ee6cb1418f29',width: 200,height:230,fit: BoxFit.cover,)),
+          //       )
+          //       ),
+
+
+          //       Container(
+          //         margin: EdgeInsets.only(left: 10,right: 10),
+          //         child: ElevatedButton(
+          //       style: ElevatedButton.styleFrom(primary: Color(0xff5D2749),fixedSize: Size(200,250),shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
+          //       onPressed: (){}, child:Text('')),
+          //       )
 
 
                
-             ],),
-             )
-           ],)
+          //    ],),
+          //    ),
+
+          //    ElevatedButton(onPressed: (){
+          //      addRoom();
+          //    }, child: Text('add room'))
+          //  ],)
          ),
         )
           
