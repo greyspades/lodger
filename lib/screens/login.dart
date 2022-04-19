@@ -84,6 +84,7 @@ class LoginState extends State<Login>{
         prefs.setBool('paid', data.docs[0]['paid']);
         prefs.setBool('status', data.docs[0]['status']);
         prefs.setInt('owing', data.docs[0]['owing']);
+        prefs.setString('image', data.docs[0]['image']);
         
         //String? mates=json.encode(data.docs[0]['problems']);
        
@@ -106,12 +107,14 @@ class LoginState extends State<Login>{
         prefs.setString('floor', data.docs[0]['floor']);
         prefs.setString('room', data.docs[0]['room']);
        
-          Navigator.push(context,MaterialPageRoute(builder: (context)=>Info(floor: data.docs[0]['floor'], number: data.docs[0]['number'],paid: data.docs[0]['paid'],status: data.docs[0]['status'],
+          Navigator.push(context,MaterialPageRoute(builder: (context)=>Info(
+            floor: data.docs[0]['floor'], number: data.docs[0]['number'],
+            paid: data.docs[0]['paid'],status: data.docs[0]['status'],
             //mail:data.docs[0]['mail'],
             owing: data.docs[0]['owing']
             ,occupants:data.docs[0]['occupants'],
             problems:data.docs[0]['problems'],
-            
+            image:data.docs[0]['image'],
             user:true
              
             )

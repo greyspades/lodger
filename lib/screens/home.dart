@@ -206,7 +206,7 @@ CollectionReference fireRef=FirebaseFirestore.instance.collection('rooms');
                 style: ElevatedButton.styleFrom(primary: Color(0xff5D2749),shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10)))),
                 onPressed: (){
                   //addRoom();
-                }, child:Column(children: [
+                }, child:Container(child: Column(children: [
                   AspectRatio(
                   aspectRatio: 230/280,
                   child: Image.network(
@@ -224,7 +224,7 @@ CollectionReference fireRef=FirebaseFirestore.instance.collection('rooms');
                     
                     ]),
                   )
-                ],)
+                ],))
                 )
                 );
               }).toList(),

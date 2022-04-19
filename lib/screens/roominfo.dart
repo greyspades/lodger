@@ -26,6 +26,7 @@ class Info extends StatefulWidget {
   bool? user;
   String? room;
   String? id;
+  String? image;
 
   Info(
       {@required this.number,
@@ -41,6 +42,7 @@ class Info extends StatefulWidget {
       this.user,
       this.room,
       this.id,
+      this.image
       });
 
  
@@ -78,6 +80,7 @@ class _InfoState extends State<Info> {
   int? owing;
   List? mail;
   String? id;
+  String? image;
 
   
  //index of the tapped navigation bar item
@@ -117,7 +120,7 @@ class _InfoState extends State<Info> {
 
   Future getData() async {
     final SharedPreferences prefs=await _prefs;
-   
+      String? imageString=await prefs.getString('image');
       String?floorData=await prefs.getString('floor');
       String? numberData=await prefs.getString('room');
       //String? numberData='carl';
@@ -137,6 +140,7 @@ class _InfoState extends State<Info> {
        paid=paidData;
       owing=owingData;
       problems=prob;
+      image=imageString;
       //occupants=occupantData;
       number=numberData;
 
@@ -194,7 +198,8 @@ final Stream<QuerySnapshot> mailStream = FirebaseFirestore.instance.collection('
       iconSelector=Icons.room_preferences;
     }
     return Scaffold(
-      backgroundColor: Color(0xffF4CBB1),
+      //backgroundColor: Color(0xffF4CBB1),
+      backgroundColor: Colors.black,
       //appBar: 
       body:  Stack(
         alignment: Alignment.center,
@@ -206,7 +211,7 @@ final Stream<QuerySnapshot> mailStream = FirebaseFirestore.instance.collection('
 
             //hero
            Container(
-             height: 250,
+             height: 220,
              child:  AppBar(backgroundColor: Color(0xffFABE99),elevation: 0,iconTheme: IconThemeData(color: Color(0xff9F3647)),actions: [
 
               //user avatar
@@ -218,14 +223,16 @@ final Stream<QuerySnapshot> mailStream = FirebaseFirestore.instance.collection('
                  child: Text(number ?? 'loading',style: TextStyle(fontSize: 25,color: Colors.white,fontWeight: FontWeight.bold),),
                )
             ],
-            flexibleSpace:Image(
+            flexibleSpace:AspectRatio(aspectRatio: 400/50,
+            child:Image(
               //opacity: 0.5,
               color: Colors.white.withOpacity(0.8),
                colorBlendMode: BlendMode.modulate,
-              image: AssetImage('images/room5.jpg'),
+              image: NetworkImage((image ?? 'images/room5.jpg')),
              fit: BoxFit.cover,
-             width: 390,
+             //width: 390,
             ) ,
+            ),
             bottom: PreferredSize(child:Container(
             //color: Colors.brown,
             margin: EdgeInsets.only(bottom: 100,left: 40),
