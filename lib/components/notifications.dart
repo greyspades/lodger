@@ -75,18 +75,19 @@ List<Item> generateItems(int numberOfItems,  data) {
       children:snapshot.data!.docs.map<Widget>((DocumentSnapshot document){
          Map<String, dynamic> doc=document.data() as Map<String, dynamic>;
        
-           var items=doc['mail'].map((item){
-             //print(item);
-             Map<String, dynamic> message=item;
-            return Item(
-              data: item,
-              expanded: false
-            );
-            //return item;
-              }).toList();
+          //  var items=doc['mail'].map((item){
+          //    //print(item);
+          //    Map<String, dynamic> message=item;
+          //   return Item(
+          //     data: item,
+          //     expanded: false
+          //   );
+          //   //return item;
+          //     }).toList();
 
               return Container(
-                height: 300,
+                color: Colors.deepPurpleAccent,
+                height: doc['mail'].length>1 ? 300 : 200,
                 child: ListView(
                 children: doc['mail'].map<Widget>((d){
                   //var time=DateTime.fromMillisecondsSinceEpoch(d['time'].toDate());
