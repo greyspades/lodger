@@ -102,9 +102,7 @@ class LoginState extends State<Login>{
         //* encode the problems object into a json string
         String? prob=json.encode(list);
         String? occ=json.encode(data.docs[0]['occupants']);
-
-      
-
+        
         prefs.setString('occupants', occ);
 
        prefs.setString('problems', prob);

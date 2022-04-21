@@ -356,12 +356,11 @@ final Stream<QuerySnapshot> mailStream = FirebaseFirestore.instance.collection('
 
 
           Container(
-           
             height: 120,
             child:ListView(
               children:problems!.map<Widget>((e){
-                return Container(
-                  
+                if(!e['fixed']){
+                  return Container(
                   padding: EdgeInsets.only(top: 5,bottom: 5,left: 10),
                   margin: EdgeInsets.all(5),
                   decoration: BoxDecoration(color: Color(0xffFBF0EA),borderRadius:BorderRadius.all(Radius.circular(5)) ),
@@ -372,6 +371,20 @@ final Stream<QuerySnapshot> mailStream = FirebaseFirestore.instance.collection('
                       ElevatedButton(onPressed: (){}, child:Icon(Icons.build_circle),style: ElevatedButton.styleFrom(primary: Color(0xff9F3647)), )
                     ]),
                 );
+                }
+                else {
+                  return Container(
+                    decoration: BoxDecoration(color:Color(0xff5D2749),
+                    borderRadius: BorderRadius.all(Radius.circular(10)) ),
+                    height: 150,
+                    child:Row(children: [
+                      Container(
+                        child: Text('Room is in optimum condition',
+                        style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                      ),
+                    ]) ,
+                  );
+                }
               }).toList(),
             ),
           ),

@@ -66,6 +66,7 @@ List<Item> generateItems(int numberOfItems,  data) {
   });
 }
 
+ CollectionReference room=FirebaseFirestore.instance.collection('rooms');
     
 
   Widget expansionPanel(AsyncSnapshot snapshot){
@@ -74,19 +75,8 @@ List<Item> generateItems(int numberOfItems,  data) {
     return Stack(
       children:snapshot.data!.docs.map<Widget>((DocumentSnapshot document){
          Map<String, dynamic> doc=document.data() as Map<String, dynamic>;
-       
-          //  var items=doc['mail'].map((item){
-          //    //print(item);
-          //    Map<String, dynamic> message=item;
-          //   return Item(
-          //     data: item,
-          //     expanded: false
-          //   );
-          //   //return item;
-          //     }).toList();
-
               return Container(
-                color: Colors.deepPurpleAccent,
+                color: Color(0xff5D2749),
                 height: doc['mail'].length>1 ? 300 : 200,
                 child: ListView(
                 children: doc['mail'].map<Widget>((d){
@@ -131,6 +121,9 @@ List<Item> generateItems(int numberOfItems,  data) {
                            child:  Text(d['item'],style: TextStyle(color: Colors.white),),
                          )
                        ],),
+                       ElevatedButton(onPressed:(){
+
+                       }, child: Text('Mark as read'))
 
                     ],)
                     ),
@@ -158,6 +151,10 @@ List<Item> generateItems(int numberOfItems,  data) {
     );
 
        
+      
+  }
+
+  void markRead(String d){
       
   }
 
